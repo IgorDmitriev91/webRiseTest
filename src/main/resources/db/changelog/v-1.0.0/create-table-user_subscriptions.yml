@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-user-subscriptions
+      author: i.dmitriev
+      changes:
+        - createTable:
+            tableName: user_subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subscription_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_user_subscriptions_user_id
+            baseTableName: user_subscriptions
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_user_subscriptions_subscription_id
+            baseTableName: user_subscriptions
+            baseColumnNames: subscription_id
+            referencedTableName: subscriptions
+            referencedColumnNames: id
+            onDelete: CASCADE

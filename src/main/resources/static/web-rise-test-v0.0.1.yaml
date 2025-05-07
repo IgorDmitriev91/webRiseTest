@@ -1,0 +1,305 @@
+openapi: 3.0.0
+info:
+  title: Web Rise Service API
+  version: developer
+servers:
+  - url: http://localhost:8082
+paths:
+  /api/v1/users:
+    post:
+      summary: создание пользователя.
+      description: создание нового пользователя.
+      operationId: saveUser
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestDTO"
+      responses:
+        '201':
+          description: Успешный ответ с информацией с uuid пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        '400':
+          description: Не удалось сохранить пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /api/v1/users/{id}:
+    get:
+      summary: получение информации о пользователе.
+      description: получение пользователя.
+      operationId: getUser
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 954da302-bdec-4c75-950b-7f31a1cb452e
+          description: "ID пользователя"
+      responses:
+        '200':
+          description: Успешный ответ с информацией о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+        '400':
+          description: Невалидные данные или некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        '404':
+          description: Пользователь не найдет
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+    put:
+      summary: изменение пользователя.
+      description: изменение данных пользователя
+      operationId: putUsers
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 954da302-bdec-4c75-950b-7f31a1cb452e
+          description: "ID пользователя"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestDTO"
+      responses:
+        '200':
+          description: Успешное сообщение
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        '400':
+          description: Невалидные данные или некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        '404':
+          description: Пользователь не найдет
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+    delete:
+      summary: удаление пользователя.
+      description: удаление пользователя по id.
+      operationId: deleteUser
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "ID пользователя для удаления."
+      responses:
+        '200':
+          description: Пользователь успешно удален
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /api/v1/users/{id}/subscriptions:
+    get:
+      summary: получить подписки пользователя.
+      description: получить подписки пользователя с id.
+      operationId: getSubscription
+      tags:
+        - Subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "ID пользователя для получении подписок."
+      responses:
+        '200':
+          description: Подписки успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscriptions"
+        '404':
+          description: Пользователь  не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+    post:
+      summary: добавить подписку.
+      description: добавить пользователю с id подписку.
+      operationId: addSubscription
+      tags:
+        - Subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "ID пользователя для добавление подписки."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        '200':
+          description: Подписка успешно добавлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        '400':
+          description: Невалидные данные или некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /api/v1/users/{id}/subscriptions/{sub_id}:
+    delete:
+        summary: удалить подписку.
+        description: удалить пользователю с id подписку.
+        operationId: deleteSubscription
+        tags:
+          - Subscription
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+              format: uuid
+            description: "ID пользователя для удалении подписки."
+          - name: sub_id
+            in: path
+            required: true
+            schema:
+              type: string
+              format: uuid
+            description: "ID подписки"
+        responses:
+          '200':
+            description: Подписка успешно удалена
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/SuccessMessage"
+          '404':
+            description: Пользователь или подписка не найдены
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ErrorMessage"
+  /api/v1/subscriptions/top:
+    get:
+      summary: получить топ подписок.
+      description: получить топ подписок.
+      operationId: getTopSubscriptions
+      tags:
+        - Subscription
+      responses:
+        '200':
+          description: Подписки успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscriptions"
+        '404':
+          description: Подписки не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+components:
+  schemas:
+    UserRequestDTO:
+      type: object
+      required:
+        - username
+        - email
+      properties:
+        userName:
+          type: string
+          description: Имя пользователя.
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя.
+    UserResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "d988e9db-3c04-4b32-a0df-a7ef515332b0"
+      allOf:
+        - $ref: "#/components/schemas/UserRequestDTO"
+    Subscription:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          description: Название подписки.
+    Subscriptions:
+      type: array
+      items:
+        $ref: "#/components/schemas/Subscription"
+    SuccessMessage:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ErrorMessage:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string

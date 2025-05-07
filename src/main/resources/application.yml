@@ -1,0 +1,16 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: web-rise-test
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yml
+    #drop-first: true
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false

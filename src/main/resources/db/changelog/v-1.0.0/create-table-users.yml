@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-users
+      author: i.dmitriev
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+                    checkConstraint: LENGTH(first_name) >= 2
+              - column:
+                  name: email
+                  type: varchar(64)
+                  constraints:
+                    unique: true
+                    nullable: false
+                    checkConstraint: LENGTH(email) >= 8
